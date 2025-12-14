@@ -114,14 +114,13 @@ let scene = {
       chat.appendChild(div);
       chat.scrollTop = chat.scrollHeight;
     }
-
-    function send() {
+function send() {
   const text = input.value.trim();
   if (!text) return;
 
   addMessage("あなた: " + text, "user");
 
-  // () 内の状況表現を検知
+  // () 内の状況表現を検知（全角・半角対応）
   const actionMatch = text.match(/[（(](.*?)[）)]/);
 
   if (actionMatch) {
@@ -135,15 +134,15 @@ let scene = {
   setTimeout(() => {
     let reply = "キャラクター: ……（物語は続く）";
 
-if (scene.lastEvent) {
-const event = normalizeEvent(scene.lastEvent);
-reply = `キャラクター: ${event}楽しかったね。`;
-
-
+    if (scene.lastEvent) {
+      const event = normalizeEvent(scene.lastEvent);
+      reply = `キャラクター: ${event}楽しかったね。`;
+    }
 
     addMessage(reply, "character");
   }, 500);
 }
+
 
   </script>
 </body>
