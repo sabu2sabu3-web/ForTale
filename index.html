@@ -85,6 +85,17 @@
   </footer>
 
   <script>
+    // ===== イベント整形 =====
+function normalizeEvent(eventText) {
+  if (!eventText) return "";
+
+  return eventText
+    .replace("で遊ぶ", "")
+    .replace("につく", "")
+    .replace("に行く", "")
+    .trim();
+}
+
     const chat = document.getElementById("chat");
     const input = document.getElementById("input");
     // ===== ForTale 状況記憶 =====
@@ -125,8 +136,9 @@ let scene = {
     let reply = "キャラクター: ……（物語は続く）";
 
 if (scene.lastEvent) {
-  reply = `キャラクター: ${scene.lastEvent}楽しかったね。`;
-}
+const event = normalizeEvent(scene.lastEvent);
+reply = `キャラクター: ${event}楽しかったね。`;
+
 
 
     addMessage(reply, "character");
