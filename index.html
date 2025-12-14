@@ -111,7 +111,8 @@ let scene = {
   addMessage("あなた: " + text, "user");
 
   // () 内の状況表現を検知
-  const actionMatch = text.match(/\((.*?)\)/);
+  const actionMatch = text.match(/[（(](.*?)[）)]/);
+
   if (actionMatch) {
     scene.location = actionMatch[1];
     scene.lastEvent = actionMatch[1];
