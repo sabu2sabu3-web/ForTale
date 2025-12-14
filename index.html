@@ -124,9 +124,10 @@ let scene = {
   setTimeout(() => {
     let reply = "キャラクター: ……（物語は続く）";
 
-    if (scene.location !== "未設定") {
-      reply = `キャラクター: ${scene.location}だね、楽しそう。`;
-    }
+if (scene.lastEvent) {
+  reply = `キャラクター: ${scene.lastEvent}楽しかったね。`;
+}
+
 
     addMessage(reply, "character");
   }, 500);
