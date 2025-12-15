@@ -165,20 +165,25 @@
 
 
     input.value = "";
+setTimeout(() => {
+  let reply = "キャラクター: ……";
 
-    setTimeout(() => {
-      let reply = "キャラクター: ……";
+  if (scene.lastEventType === "move") {
+    reply = "キャラクター: 着いたね！何する？";
+  } 
+  else if (scene.lastEventType === "action") {
+    reply = "キャラクター: 楽しかったね！";
+  } 
+  else if (scene.lastEventType === "observe") {
+    reply = "キャラクター: それ気になるね。";
+  }
+  else if (scene.lastEventType === "talk") {
+    reply = "キャラクター: いいね！";
+  }
 
-      if (scene.lastEventType === "move") {
-        reply = "キャラクター: 着いたね！何する？";
-      } else if (scene.lastEventType === "action") {
-        reply = "キャラクター: 楽しかったね！";
-      } else if (scene.lastEventType === "observe") {
-        reply = "キャラクター: それ気になるね。";
-      }
+  addMessage(reply, "character");
+}, 500);
 
-      addMessage(reply, "character");
-    }, 500);
   }
 </script>
 
