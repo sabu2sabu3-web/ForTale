@@ -133,6 +133,9 @@
   }
 
   function send() {
+  messageId++;
+  const currentId = messageId;
+
     const text = input.value.trim();
     if (!text) return;
 
@@ -167,6 +170,7 @@
 
     input.value = "";
 setTimeout(() => {
+    if (currentId !== messageId) return;
   let reply = "キャラクター: ……";
 
   if (scene.lastEventType === "move") {
