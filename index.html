@@ -101,26 +101,10 @@
 
 
   // ===== ForTale 状況記憶 =====
-  // ===== ForTale キャラクター定義（Step1）=====
-const characters = [
-  {
-    id: "mika",
-    name: "ミカ",
-    intro: "え、待って！まずはゲームセンター行こ！",
-    profile: "明るくて行動力がある"
-  },
-  {
-    id: "yu",
-    name: "ユウ",
-    intro: "人混みは少し苦手だけど、付き合うよ。",
-    profile: "落ち着いていて冷静"
-  }
-];
-
   let scene = {
     location: "未設定",
     mood: "未設定",
-    participants: ["あなた", "ミカ", "ユウ"],
+    participants: ["あなた", "キャラクター1"],
     lastEvent: "",
     lastTalk: "",
   };
@@ -131,13 +115,6 @@ const characters = [
   };
 
   function addMessage(text, type) {
-    // ===== キャラクター登場時イントロ（Step2）=====
-window.addEventListener("load", () => {
-  characters.forEach(character => {
-    addMessage(`${character.name}: ${character.intro}`, "character");
-  });
-});
-
     const div = document.createElement("div");
     div.className = "message " + type;
     div.textContent = text;
@@ -232,4 +209,3 @@ reply = "キャラクター: " + replies.join(" ");
 
 </body>
 </html>
-
