@@ -144,12 +144,7 @@ if (actionMatch) {
 
   input.value = "";
 
-  setTimeout(() => {
-    let reply = "キャラクター: ……（物語は続く）";
-
-    if (scene.lastEvent) {
-      const event = normalizeEvent(scene.lastEvent);
-      setTimeout(() => {
+setTimeout(() => {
   let reply = "キャラクター: ……";
 
   if (scene.lastEventType === "move") {
@@ -166,10 +161,6 @@ if (actionMatch) {
   addMessage(reply, "character");
 }, 500);
 
-    }
-
-    addMessage(reply, "character");
-  }, 500);
 }
 
 
