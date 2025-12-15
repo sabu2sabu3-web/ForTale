@@ -157,6 +157,12 @@
 
       scene.mood = "楽しい";
     }
+    else {
+  // ★ ここが「普通の会話」
+  scene.lastEventType = "talk";
+  scene.lastTalk = text;
+}
+
 
     input.value = "";
 
