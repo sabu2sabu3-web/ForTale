@@ -84,92 +84,98 @@
     <button onclick="send()">送信</button>
   </footer>
 
-  <script>
-    // ===== イベント整形 =====
-function normalizeEvent(eventText) {
-  if (!eventText) return "";
+<script>
+  // ===== イベント整形 =====
+  function normalizeEvent(eventText) {
+    if (!eventText) return "";
+    return eventText
+      .replace("で遊ぶ", "")
+      .replace("につく", "")
+      .replace("に行く", "")
+      .trim();
+  }
 
-  return eventText
-    .replace("で遊ぶ", "")
-    .replace("につく", "")
-    .replace("に行く", "")
-    .trim();
-}
+  const chat = document.getElementById("chat");
+  const input = document.getElementById("input");
 
-    const chat = document.getElementById("chat");
-    const input = document.getElementById("input");
-    // ===== ForTale 状況記憶 =====
-let scene = {
-  location: "未設定",
-  mood: "未設定",
-  participants: ["あなた", "キャラクター1"],
-  lastEvent: ""
-};
-    // ===== ForTale 記憶 =====
-let memory = {
-  episodes: []
-};
+  // ===== ForTale 状況記憶 =====
+  let scene = {
+    location: "未設定",
+    mood: "未設定",
+    participants: ["あなた", "キャラクター1"],
+    lastEvent: ""
+  };
 
+  // ===== ForTale 記憶 =====
+  let memory = {
+    episodes: []
+  };
 
+  function addMessage(text, type) {
+    const div = document.createElement("div");
+    div.className = "message " + type;
+    div.textContent = text;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+  }
 
-    function addMessage(text, type) {
-      const div = document.createElement("div");
-      div.className = "message " + type;
-      div.textContent = text;
-      chat.appendChild(div);
-      chat.scrollTop = chat.scrollHeight;
+  // ===== episode保存関数 =====
+  function saveEpisode(location, action) {
+    if (!location || !action) return;
+
+    memory.episodes.push({
+      location: location,
+      summary: normalizeEvent(action)
+    });
+
+    console.log("episode保存:", memory.episodes);
+  }
+
+  function send() {
+    const text = input.value.trim();
+    if (!text) return;
+
+    addMessage("あなた: " + text, "user");
+
+    const actionMatch = text.match(/[（(](.*?)[）)]/);
+
+    if (actionMatch) {
+      const eventText = actionMatch[1];
+      scene.lastEvent = eventText;
+
+      if (eventText.includes("つく") || eventText.includes("行く")) {
+        scene.lastEventType = "move";
+        scene.location = eventText;
+      } else if (eventText.includes("遊ぶ") || eventText.includes("食べる")) {
+        scene.lastEventType = "action";
+
+        // ★ episodeを保存
+        saveEpisode(scene.location, eventText);
+      } else {
+        scene.lastEventType = "observe";
+      }
+
+      scene.mood = "楽しい";
     }
-function send() {
-  const text = input.value.trim();
-  if (!text) return;
 
-  addMessage("あなた: " + text, "user");
+    input.value = "";
 
-  // () 内の状況表現を検知（全角・半角対応）
-  const actionMatch = text.match(/[（(](.*?)[）)]/);
+    setTimeout(() => {
+      let reply = "キャラクター: ……";
 
-if (actionMatch) {
-  const eventText = actionMatch[1];
-  scene.lastEvent = eventText;
+      if (scene.lastEventType === "move") {
+        reply = "キャラクター: 着いたね！何する？";
+      } else if (scene.lastEventType === "action") {
+        reply = "キャラクター: 楽しかったね！";
+      } else if (scene.lastEventType === "observe") {
+        reply = "キャラクター: それ気になるね。";
+      }
 
-  if (eventText.includes("つく") || eventText.includes("行く")) {
-    scene.lastEventType = "move";
-    scene.location = eventText;
-  } 
-  else if (eventText.includes("遊ぶ") || eventText.includes("食べる")) {
-    scene.lastEventType = "action";
-  } 
-  else {
-    scene.lastEventType = "observe";
+      addMessage(reply, "character");
+    }, 500);
   }
+</script>
 
-  scene.mood = "楽しい";
-}
-
-
-  input.value = "";
-
-setTimeout(() => {
-  let reply = "キャラクター: ……";
-
-  if (scene.lastEventType === "move") {
-    reply = "キャラクター: 着いたね！何する？";
-  } 
-  else if (scene.lastEventType === "action") {
-    const event = normalizeEvent(scene.lastEvent);
-    reply = `キャラクター: ${event}楽しかったね！`;
-  } 
-  else if (scene.lastEventType === "observe") {
-    reply = "キャラクター: それ気になるね。";
-  }
-
-  addMessage(reply, "character");
-}, 500);
-
-}
-
-
-  </script>
 </body>
 </html>
 
