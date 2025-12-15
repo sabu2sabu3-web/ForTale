@@ -135,6 +135,10 @@
   }
 
   function send() {
+    scene.lastEventType = null;
+scene.lastEvent = "";
+scene.lastTalk = "";
+
   messageId++;
   const currentId = messageId;
 
