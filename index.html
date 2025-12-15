@@ -123,11 +123,24 @@ function send() {
   // () 内の状況表現を検知（全角・半角対応）
   const actionMatch = text.match(/[（(](.*?)[）)]/);
 
-  if (actionMatch) {
-    scene.location = actionMatch[1];
-    scene.lastEvent = actionMatch[1];
-    scene.mood = "楽しい";
+if (actionMatch) {
+  const eventText = actionMatch[1];
+  scene.lastEvent = eventText;
+
+  if (eventText.includes("つく") || eventText.includes("行く")) {
+    scene.lastEventType = "move";
+    scene.location = eventText;
+  } 
+  else if (eventText.includes("遊ぶ") || eventText.includes("食べる")) {
+    scene.lastEventType = "action";
+  } 
+  else {
+    scene.lastEventType = "observe";
   }
+
+  scene.mood = "楽しい";
+}
+
 
   input.value = "";
 
@@ -136,7 +149,23 @@ function send() {
 
     if (scene.lastEvent) {
       const event = normalizeEvent(scene.lastEvent);
-      reply = `キャラクター: ${event}楽しかったね。`;
+      setTimeout(() => {
+  let reply = "キャラクター: ……";
+
+  if (scene.lastEventType === "move") {
+    reply = "キャラクター: 着いたね！何する？";
+  } 
+  else if (scene.lastEventType === "action") {
+    const event = normalizeEvent(scene.lastEvent);
+    reply = `キャラクター: ${event}楽しかったね！`;
+  } 
+  else if (scene.lastEventType === "observe") {
+    reply = "キャラクター: それ気になるね。";
+  }
+
+  addMessage(reply, "character");
+}, 500);
+
     }
 
     addMessage(reply, "character");
