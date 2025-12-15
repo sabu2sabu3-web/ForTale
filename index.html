@@ -163,11 +163,13 @@
 
       scene.mood = "楽しい";
     }
-    else {
-  // ★ ここが「普通の会話」
-  scene.lastEventType = "talk";
-  scene.lastTalk = text;
+// ★ 会話部分を抽出（() の外）
+const talkText = text.replace(/[（(].*?[）)]/, "").trim();
+
+if (talkText) {
+  scene.lastTalk = talkText;
 }
+
 
 
     input.value = "";
@@ -175,24 +177,24 @@ setTimeout(() => {
     if (currentId !== messageId) return;
   let reply = "キャラクター: ……";
 
-  if (scene.lastEventType === "move") {
-    reply = "キャラクター: 着いたね！何する？";
-  } 
-  else if (scene.lastEventType === "action") {
-    reply = "キャラクター: 楽しかったね！";
-  } 
-  else if (scene.lastEventType === "observe") {
-    reply = "キャラクター: それ気になるね。";
-  }
-else if (scene.lastEventType === "talk") {
+ let replies = [];
 
-  if (scene.location.includes("ショッピングモール")) {
-    reply = "キャラクター: さっきクレーンゲームあったし、行こうよ！";
-  } else {
-    reply = "キャラクター: いいね！";
-  }
-
+// 状況への反応
+if (scene.lastEventType === "move") {
+  replies.push("着いたね！");
 }
+
+// 会話への反応
+if (scene.lastTalk) {
+  if (scene.lastTalk.includes("ゲームセンター")) {
+    replies.push("ゲームセンター行こう！");
+  } else {
+    replies.push("いいね！");
+  }
+}
+
+reply = "キャラクター: " + replies.join(" ");
+
 
 
   addMessage(reply, "character");
