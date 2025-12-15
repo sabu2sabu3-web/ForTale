@@ -104,6 +104,7 @@
     mood: "未設定",
     participants: ["あなた", "キャラクター1"],
     lastEvent: ""
+    lastTalk: ""
   };
 
   // ===== ForTale 記憶 =====
@@ -177,9 +178,16 @@ setTimeout(() => {
   else if (scene.lastEventType === "observe") {
     reply = "キャラクター: それ気になるね。";
   }
-  else if (scene.lastEventType === "talk") {
+else if (scene.lastEventType === "talk") {
+
+  if (scene.location.includes("ショッピングモール")) {
+    reply = "キャラクター: さっきクレーンゲームあったし、行こうよ！";
+  } else {
     reply = "キャラクター: いいね！";
   }
+
+}
+
 
   addMessage(reply, "character");
 }, 500);
